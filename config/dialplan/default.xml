@@ -1,0 +1,48 @@
+<include>
+  <context name="default">
+    <extension name="health_check">
+      <condition field="destination_number" expression="^9191$">
+        <action application="answer"/>
+        <action application="playback" data="tone_stream://%(2000,4000,440,480)"/>
+        <action application="hangup"/>
+      </condition>
+    </extension>
+
+  <!--
+    Outbound trunk example with stereo WAV recording:
+
+    <extension name="outbound_recorded">
+      <condition field="destination_number" expression="^(\d+)$">
+        <action application="set" data="RECORD_STEREO=true"/>
+        <action application="record_session" data="$${recordings_dir}/${uuid}.wav"/>
+        <action application="bridge" data="sofia/gateway/my_trunk/$1"/>
+      </condition>
+    </extension>
+  -->
+
+  <!--
+    Inbound fax example (T.38):
+
+    <extension name="inbound_fax">
+      <condition field="destination_number" expression="^1234$">
+        <action application="set" data="fax_enable_t38=true"/>
+        <action application="set" data="fax_enable_t38_request=true"/>
+        <action application="disable_ec"/>
+        <action application="answer"/>
+        <action application="playback" data="silence_stream://2000"/>
+        <action application="rxfax" data="/var/spool/fax/${uuid}.tif"/>
+        <action application="hangup"/>
+      </condition>
+    </extension>
+  -->
+  </context>
+
+  <context name="public">
+    <extension name="unloop">
+      <condition field="${unroll_loops}" expression="^true$"/>
+      <condition field="${sip_looped_call}" expression="^true$">
+        <action application="deflect" data="${destination_number}"/>
+      </condition>
+    </extension>
+  </context>
+</include>

@@ -1,0 +1,6 @@
+<configuration name="spandsp.conf" description="SpanDSP Fax">
+  <settings>
+    <param name="enable-t38" value="true"/>
+    <param name="verbose" value="false"/>
+  </settings>
+</configuration>

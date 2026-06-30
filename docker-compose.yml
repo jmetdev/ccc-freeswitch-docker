@@ -1,0 +1,23 @@
+services:
+  freeswitch:
+    image: ${IMAGE:-ccc-freeswitch-docker}:${TAG:-dev}
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        FREESWITCH_VERSION: ${FREESWITCH_VERSION:-v1.11.1}
+    container_name: freeswitch
+    restart: unless-stopped
+    cap_add:
+      - SYS_NICE
+    network_mode: host
+    volumes:
+      - ./runtime/config:/etc/freeswitch
+      - ./runtime/logs:/var/log/freeswitch
+      - ./runtime/recordings:/var/lib/freeswitch/recordings
+      - ./runtime/fax:/var/spool/fax
+    healthcheck:
+      test: ["CMD", "fs_cli", "-x", "status"]
+      interval: 15s
+      timeout: 5s
+      retries: 3

@@ -1,0 +1,9 @@
+<configuration name="local_stream.conf" description="Local Stream">
+  <directory name="default" path="/usr/share/freeswitch/sounds/music/8000">
+    <param name="rate" value="8000"/>
+    <param name="shuffle" value="true"/>
+    <param name="channels" value="1"/>
+    <param name="interval" value="20"/>
+    <param name="timer-name" value="soft"/>
+  </directory>
+</configuration>
