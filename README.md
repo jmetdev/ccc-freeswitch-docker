@@ -110,6 +110,18 @@ CI publishes manifest lists via `.github/workflows/build.yml`.
 
 SpanDSP is pinned to a commit compatible with FreeSWITCH 1.10.x. When bumping FreeSWITCH versions, re-validate the SpanDSP pin in the Dockerfile.
 
-## License
+## Call Recording Portal (companion repo)
 
-GPL-3.0 (FreeSWITCH is MPL/GPL). See upstream licenses.
+This image is generic and carries **no** portal-specific code. The CUCM BIB call
+recording portal — and the FreeSWITCH integration that feeds it (BIB dialplan,
+ACL, and hangup hook scripts) — lives in a separate repo:
+[`ccc-recording-portal`](https://github.com/jmetdev/ccc-recording-portal).
+
+When you deploy the portal alongside this container, its `freeswitch/` folder is
+layered on top: the dialplan/ACL are copied into `runtime/config/`, and the hook
+scripts are mounted at `/usr/local/sbin` via an additive compose override that
+also supplies the `PORTAL_API_URL` / `INGEST_TOKEN` env the hooks need.
+
+For deploying both repos on one host, see
+[docs/DEPLOY-SPLIT-REPOS.md](docs/DEPLOY-SPLIT-REPOS.md) and the portal's
+`freeswitch/README.md`.
