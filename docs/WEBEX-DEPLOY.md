@@ -144,6 +144,26 @@ sync config, and test T.38 after voice trunk is stable.
 make deploy-webex
 ```
 
+### Credential preservation on redeploy
+
+`webex_*` values live only in **`runtime/config/vars.xml`** on the server (and in your
+local `ccc-freeswitch-docker/runtime/config/vars.xml` after first paste). The tracked
+`config/vars.xml` keeps `CHANGE_ME` placeholders and must never contain real passwords.
+
+Redeploy is safe: `make deploy-webex` runs `sync-config-to-runtime.sh`, which copies
+versioned `config/` into `runtime/config/` but **merges** any non-placeholder `webex_*`
+values from the existing runtime file instead of wiping them. The deploy script does the
+same merge against the server's `runtime/config/vars.xml` before uploading.
+
+To refresh config without losing credentials locally:
+
+```bash
+make sync-fs-config   # merges webex_* from runtime/config/vars.xml
+```
+
+If you need to rotate trunk credentials, edit `runtime/config/vars.xml` on the server
+(or locally), then redeploy or `reloadxml` + `sofia profile external restart`.
+
 ## What's left
 
 - [ ] Paste Control Hub `webex_*` values into server `vars.xml`
