@@ -31,11 +31,9 @@
     </extension>
   -->
 
-  <!--
-    Inbound fax example (T.38):
-
+    <!-- Inbound fax (T.38) — matches Webex Line/Port from vars.xml -->
     <extension name="inbound_fax">
-      <condition field="destination_number" expression="^1234$">
+      <condition field="destination_number" expression="^$${webex_line_port}$">
         <action application="set" data="fax_enable_t38=true"/>
         <action application="set" data="fax_enable_t38_request=true"/>
         <action application="disable_ec"/>
@@ -45,7 +43,6 @@
         <action application="hangup"/>
       </condition>
     </extension>
-  -->
   </context>
 
   <context name="public">
@@ -64,7 +61,7 @@
     -->
     <extension name="webex_inbound">
       <condition field="destination_number" expression="^$${webex_line_port}$">
-        <action application="transfer" data="9191 XML default"/>
+        <action application="transfer" data="$${webex_line_port} XML default"/>
       </condition>
     </extension>
   </context>
