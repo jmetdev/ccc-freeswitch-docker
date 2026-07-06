@@ -36,7 +36,7 @@
       <condition field="destination_number" expression="^$${webex_line_port}$">
         <action application="set" data="fax_enable_t38=true"/>
         <action application="set" data="fax_enable_t38_request=true"/>
-        <action application="disable_ec"/>
+        <action application="set" data="echo_cancel_type=none"/>
         <action application="answer"/>
         <action application="playback" data="silence_stream://2000"/>
         <action application="rxfax" data="/var/spool/fax/${uuid}.tif"/>
