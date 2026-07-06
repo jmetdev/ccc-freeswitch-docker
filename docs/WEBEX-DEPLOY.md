@@ -70,6 +70,26 @@ docker exec freeswitch fs_cli -x "sofia status gateway webex"
 
 **Registration OK** shows `State REGED`. Until credentials are pasted, expect `FAIL_WAIT` or auth errors.
 
+## SIP registration (registrar vs outbound proxy)
+
+Control Hub still lists a **Registrar FQDN** (e.g. `16855334…bcld.webex.com`), but that hostname
+**does not resolve on the public Internet** from the dev host. Do not point FreeSWITCH REGISTER
+at the registrar FQDN alone — registration will fail with DNS or timeout errors.
+
+**Required behavior** (see `config/sip_profiles/external/webex_gateway.xml`):
+
+| Setting | Value |
+|---------|--------|
+| `proxy` | Outbound proxy FQDN with port **8934** (e.g. `da07…sipconnect.bcld.webex.com:8934`) |
+| `register-proxy` | Same outbound proxy (REGISTER must hit the SBC, not the registrar name) |
+| `outbound-proxy` | Same outbound proxy |
+| `realm` | **`BroadWorks`** — digest realm from Webex; **not** the registrar domain |
+| `from-domain` | Registrar FQDN (identity in From/Contact only) |
+
+Set `webex_outbound_proxy` in `vars.xml` to the Control Hub outbound proxy host **including `:8934`**.
+Keep `webex_registrar` as the Control Hub registrar FQDN for headers; signaling uses the proxy.
+
+
 ## Ports / firewall
 
 FreeSWITCH uses **host networking**. Ensure these are open on the cloud firewall:
