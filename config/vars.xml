@@ -24,11 +24,11 @@
     All six values come from Control Hub when the trunk is created
     (Calling > Call Routing > Trunks > Add Trunk, type "Registration based").
     webex_line_port is the user part only (before the @).
-    The outbound proxy port (8934) is resolved via DNS SRV; if SRV lookup
-    fails, append ":8934" to webex_outbound_proxy.
+    Include :8934 on webex_outbound_proxy so FreeSWITCH does not try to
+    resolve the registrar FQDN for TLS transport to the SBC.
   -->
   <X-PRE-PROCESS cmd="set" data="webex_registrar=CHANGE_ME.example.bcld.webex.com"/>
-  <X-PRE-PROCESS cmd="set" data="webex_outbound_proxy=CHANGE_ME.sipconnect.bcld.webex.com"/>
+  <X-PRE-PROCESS cmd="set" data="webex_outbound_proxy=CHANGE_ME.sipconnect.bcld.webex.com:8934"/>
   <X-PRE-PROCESS cmd="set" data="webex_line_port=CHANGE_ME_LGU"/>
   <X-PRE-PROCESS cmd="set" data="webex_username=CHANGE_ME_LGU"/>
   <X-PRE-PROCESS cmd="set" data="webex_password=CHANGE_ME"/>

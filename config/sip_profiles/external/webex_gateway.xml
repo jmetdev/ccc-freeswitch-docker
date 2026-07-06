@@ -17,10 +17,13 @@
     <!-- Digest credentials from Control Hub -->
     <param name="auth-username" value="$${webex_username}"/>
     <param name="password" value="$${webex_password}"/>
-    <param name="realm" value="$${webex_registrar}"/>
+    <!-- Digest realm is always BroadWorks; do not use the registrar FQDN here -->
+    <param name="realm" value="BroadWorks"/>
     <param name="from-user" value="$${webex_line_port}"/>
     <param name="from-domain" value="$${webex_registrar}"/>
-    <param name="proxy" value="$${webex_registrar}"/>
+    <!-- Signaling goes to the outbound proxy/SBC (TLS :8934), not the registrar FQDN -->
+    <param name="proxy" value="$${webex_outbound_proxy}"/>
+    <param name="register-proxy" value="$${webex_outbound_proxy}"/>
     <param name="outbound-proxy" value="$${webex_outbound_proxy}"/>
     <param name="register" value="true"/>
     <param name="register-transport" value="tls"/>
