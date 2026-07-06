@@ -17,7 +17,7 @@ services:
       - ./runtime/recordings:/var/lib/freeswitch/recordings
       - ./runtime/fax:/var/spool/fax
     healthcheck:
-      test: ["CMD", "fs_cli", "-x", "status"]
+      test: ["CMD", "fs_cli", "-H", "127.0.0.1", "-P", "8021", "-p", "ChangeMe-ESL-Password", "-x", "status"]
       interval: 15s
       timeout: 5s
       retries: 3
