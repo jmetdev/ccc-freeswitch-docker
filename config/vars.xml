@@ -12,8 +12,27 @@
   <X-PRE-PROCESS cmd="set" data="external_tls_port=5071"/>
   <X-PRE-PROCESS cmd="set" data="internal_sip_port=5060"/>
   <X-PRE-PROCESS cmd="set" data="internal_tls_port=5061"/>
-  <X-PRE-PROCESS cmd="set" data="external_ssl_enable=false"/>
+  <!-- TLS is required for the Webex Calling registration trunk -->
+  <X-PRE-PROCESS cmd="set" data="external_ssl_enable=true"/>
   <X-PRE-PROCESS cmd="set" data="sip_tls_version=tlsv1.2"/>
+  <!-- Verify the Webex server certificate on outgoing TLS (needs certs/cafile.pem,
+       seeded by the entrypoint). Set to "none" only for debugging. -->
+  <X-PRE-PROCESS cmd="set" data="external_tls_verify_policy=out"/>
+
+  <!--
+    Webex Calling registration-based trunk.
+    All six values come from Control Hub when the trunk is created
+    (Calling > Call Routing > Trunks > Add Trunk, type "Registration based").
+    webex_line_port is the user part only (before the @).
+    The outbound proxy port (8934) is resolved via DNS SRV; if SRV lookup
+    fails, append ":8934" to webex_outbound_proxy.
+  -->
+  <X-PRE-PROCESS cmd="set" data="webex_registrar=CHANGE_ME.example.bcld.webex.com"/>
+  <X-PRE-PROCESS cmd="set" data="webex_outbound_proxy=CHANGE_ME.sipconnect.bcld.webex.com"/>
+  <X-PRE-PROCESS cmd="set" data="webex_line_port=CHANGE_ME_LGU"/>
+  <X-PRE-PROCESS cmd="set" data="webex_username=CHANGE_ME_LGU"/>
+  <X-PRE-PROCESS cmd="set" data="webex_password=CHANGE_ME"/>
+  <X-PRE-PROCESS cmd="set" data="webex_otg=CHANGE_ME_lgu"/>
 
   <X-PRE-PROCESS cmd="set" data="local_ip_v4=0.0.0.0"/>
   <X-PRE-PROCESS cmd="set" data="external_rtp_ip=0.0.0.0"/>

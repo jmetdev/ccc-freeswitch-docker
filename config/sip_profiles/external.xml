@@ -23,6 +23,7 @@
     <param name="tls-sip-port" value="$${external_tls_port}"/>
     <param name="tls-version" value="$${sip_tls_version}"/>
     <param name="tls-cert-dir" value="/etc/freeswitch/certs"/>
+    <param name="tls-verify-policy" value="$${external_tls_verify_policy}"/>
     <param name="inbound-codec-prefs" value="$${global_codec_prefs}"/>
     <param name="outbound-codec-prefs" value="$${outbound_codec_prefs}"/>
     <param name="inbound-codec-negotiation" value="generous"/>

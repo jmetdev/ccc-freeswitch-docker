@@ -8,6 +8,17 @@
       </condition>
     </extension>
 
+    <!--
+      Outbound to Webex Calling. The From URI carries the trunk group OTG tag,
+      which Webex uses to associate the call with the registration trunk.
+    -->
+    <extension name="webex_outbound">
+      <condition field="destination_number" expression="^(\+?\d{7,15})$">
+        <action application="export" data="nolocal:sip_invite_full_from=&lt;sip:${caller_id_number}@$${webex_registrar};otg=$${webex_otg}&gt;"/>
+        <action application="bridge" data="sofia/gateway/webex/$1"/>
+      </condition>
+    </extension>
+
   <!--
     Outbound trunk example with stereo WAV recording:
 
@@ -42,6 +53,18 @@
       <condition field="${unroll_loops}" expression="^true$"/>
       <condition field="${sip_looped_call}" expression="^true$">
         <action application="deflect" data="${destination_number}"/>
+      </condition>
+    </extension>
+
+    <!--
+      Inbound from Webex Calling. The gateway's "extension" param rewrites the
+      destination to the Line/Port; the original dialed number remains in
+      ${sip_req_user} / ${sip_to_user}. Routes to the health-check tone for
+      trunk validation — replace the transfer target with real routing.
+    -->
+    <extension name="webex_inbound">
+      <condition field="destination_number" expression="^$${webex_line_port}$">
+        <action application="transfer" data="9191 XML default"/>
       </condition>
     </extension>
   </context>
