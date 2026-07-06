@@ -13,6 +13,19 @@ Deploy a **dedicated** FreeSWITCH instance for Webex Calling registration trunk 
 | Remote path | `/opt/ccc-freeswitch-webex` |
 | Container | `freeswitch` (host network) |
 
+### Legacy `ccc-fax` native FreeSWITCH
+
+This host previously ran a **systemd-managed** native FreeSWITCH (`freeswitch.service`
+from `/opt/ccc-fax`). It also binds host SIP ports and conflicts with the Docker
+container. For the Webex dev instance, the legacy service was **stopped and disabled**:
+
+```bash
+systemctl stop freeswitch && systemctl disable freeswitch
+docker restart freeswitch
+```
+
+To restore the old `ccc-fax` stack, stop the Docker container and re-enable the service.
+
 ## Deploy from workspace root
 
 ```bash
@@ -75,13 +88,13 @@ Outbound: TLS to Webex on port **8934** (via DNS SRV on `webex_outbound_proxy`).
 ```bash
 # Container health
 docker ps --filter name=freeswitch
-docker exec freeswitch fs_cli -x "status"
+docker exec freeswitch fs_cli -H 127.0.0.1 -P 8021 -p ChangeMe-ESL-Password -x "status"
 
 # Gateway registration
-docker exec freeswitch fs_cli -x "sofia status gateway webex"
+docker exec freeswitch fs_cli -H 127.0.0.1 -P 8021 -p ChangeMe-ESL-Password -x "sofia status gateway webex"
 
 # SIP trace (temporary)
-docker exec freeswitch fs_cli -x "sofia profile external siptrace on"
+docker exec freeswitch fs_cli -H 127.0.0.1 -P 8021 -p ChangeMe-ESL-Password -x "sofia profile external siptrace on"
 
 # Logs
 docker logs freeswitch --tail 100
